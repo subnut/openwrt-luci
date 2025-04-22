@@ -135,6 +135,9 @@ return baseclass.extend({
 
 	oneshot: function(data) {
 		var boardinfo = data[0];
+		if (boardinfo?.release?.version === 'SNAPSHOT')
+			return;	// There's nothing newer than SNAPSHOT
+
 		const check_upgrades = uci.get_bool('luci', 'main', 'check_for_newer_firmwares') ?? false;
 
 		if (check_upgrades) {
@@ -171,6 +174,10 @@ return baseclass.extend({
 	},
 
 	render: function(data) {
+		var boardinfo = data[0];
+		if (boardinfo?.release?.version === 'SNAPSHOT')
+			return E([]);	// There's nothing newer than SNAPSHOT
+
 		const check_upgrades = uci.get_bool('luci', 'main', 'check_for_newer_firmwares') ?? false;
 		const isReadonlyView = !L.hasViewPermission();
 
